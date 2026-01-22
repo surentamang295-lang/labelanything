@@ -3,12 +3,22 @@
 Example script demonstrating the data reading functionality.
 """
 
+import os
 from reader import DataReader, read_file
 
 
 def main():
     """Demonstrate reading different file formats."""
     reader = DataReader()
+    
+    # Check if example files exist
+    example_files = ['example.txt', 'example.csv', 'example.json']
+    missing_files = [f for f in example_files if not os.path.exists(f)]
+    
+    if missing_files:
+        print("ERROR: Missing example files:", ', '.join(missing_files))
+        print("Please ensure example files are present in the current directory.")
+        return 1
     
     print("=" * 50)
     print("DataReader Example - Testing File Reading")
@@ -53,7 +63,8 @@ def main():
     print("\n" + "=" * 50)
     print("All tests completed successfully!")
     print("=" * 50)
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    exit(main())

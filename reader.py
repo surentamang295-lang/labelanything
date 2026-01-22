@@ -49,19 +49,36 @@ class DataReader:
     
     def _read_txt(self, filepath: str) -> str:
         """Read a text file."""
-        with open(filepath, 'r', encoding='utf-8') as f:
-            return f.read()
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                return f.read()
+        except UnicodeDecodeError as e:
+            raise ValueError(f"Unable to decode file {filepath} as UTF-8: {e}")
+        except IOError as e:
+            raise IOError(f"Error reading file {filepath}: {e}")
     
     def _read_csv(self, filepath: str) -> List[Dict[str, Any]]:
         """Read a CSV file and return as list of dictionaries."""
-        with open(filepath, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
-            return list(reader)
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                return list(reader)
+        except UnicodeDecodeError as e:
+            raise ValueError(f"Unable to decode file {filepath} as UTF-8: {e}")
+        except IOError as e:
+            raise IOError(f"Error reading file {filepath}: {e}")
     
     def _read_json(self, filepath: str) -> Union[Dict, List]:
         """Read a JSON file."""
-        with open(filepath, 'r', encoding='utf-8') as f:
-            return json.load(f)
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Invalid JSON in file {filepath}: {e}")
+        except UnicodeDecodeError as e:
+            raise ValueError(f"Unable to decode file {filepath} as UTF-8: {e}")
+        except IOError as e:
+            raise IOError(f"Error reading file {filepath}: {e}")
     
     def can_read(self, filepath: str) -> bool:
         """
